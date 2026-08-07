@@ -73,8 +73,24 @@ while True:
             break
 
     elif pilihan == 3:
-        print("Tunggu update kocak")
-        input("\ntekan enter untuk lanjut")
+        while True:
+            bersihin_layar()
+
+            while True:
+                cari_barang = input("Masukkan Nama Barang yang Ingin dicari: ")
+                if cari_barang == "":
+                    print("Data Tidak Boleh Kosong")
+                else:
+                    break
+
+            if cari_barang not in barang_lengkap:
+                print("Data Barang Tidak Ditemukan")
+            else:
+                hasil_cari = barang_lengkap.get(cari_barang)
+                print(f"Barang dengan nama {cari_barang}, dengan jumlah stok {hasil_cari} berhasil ditemukan")
+            
+            jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
+            break
 
     elif pilihan == 4:
         print("Nah cuma ini doang yang ada wkkwkw")
