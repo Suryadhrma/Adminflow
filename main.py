@@ -1,6 +1,7 @@
 import os
 
 menu_utama = ["Tambah Barang", "Lihat Barang", "Cari Barang", "Keluar"]
+barang_lengkap = {}
 
 def bersihin_layar():
     if os.name == 'nt':
@@ -8,12 +9,15 @@ def bersihin_layar():
     else:
         os.system(clear)
 
-while True:
-    bersihin_layar()
-    
+def tampilan_menu ():
     print("===== MENU UTAMA =====")
     for nomor, menu in enumerate(menu_utama, start=1):
         print(f"{nomor}. {menu}")
+
+while True:
+    bersihin_layar()
+    
+    tampilan_menu()
 
     pilihan_user = input("\nPilih Menu:")
 
@@ -24,9 +28,26 @@ while True:
     pilihan = int(pilihan_user)
 
     if pilihan == 1:
-        print("Belum Ada jir")
-        input("\ntekan enter untuk lanjut")
+        while True:
+            bersihin_layar()
 
+            barang = input("Masukkan Nama Barang: ")
+
+            jumlah = input(f"Masukkan Jumlah Barang {barang}: ")
+
+            barang_lengkap[barang] = jumlah
+
+            if not jumlah.isdigit():
+                print("Masukkan angka bang!")
+                input("\ntekan enter untuk lanjut")
+                continue
+
+
+            print(f"Barang dengan nama {barang}, dengan jumlah {jumlah}, berhasil di tambahkan!")
+
+            jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
+            break
+            
     elif pilihan == 2:
         print("Belum Ada Juga Cuy")
         input("\ntekan enter untuk lanjut")
