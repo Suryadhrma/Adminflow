@@ -15,6 +15,9 @@ def tampilan_menu ():
         print(f"{nomor}. {menu}")
 
 while True:
+    barang = []
+    jumlah = []
+
     bersihin_layar()
     
     tampilan_menu()
@@ -31,26 +34,43 @@ while True:
         while True:
             bersihin_layar()
 
-            barang = input("Masukkan Nama Barang: ")
+            while True:
+                bersihin_layar()
+                barang = input("Masukkan Nama Barang: ")
+                if barang == "":
+                    print("Data Tidak Boleh Kosong")
+                else:
+                    break
 
-            jumlah = input(f"Masukkan Jumlah Barang {barang}: ")
+            while True:
+                bersihin_layar()
+                jumlah = input(f"Masukkan Jumlah Barang {barang}: ")
+                if not jumlah.isdigit():
+                    print("Masukkan angka bang!")
+                else:
+                    break
+
+            bersihin_layar()
 
             barang_lengkap[barang] = jumlah
-
-            if not jumlah.isdigit():
-                print("Masukkan angka bang!")
-                input("\ntekan enter untuk lanjut")
-                continue
-
-
             print(f"Barang dengan nama {barang}, dengan jumlah {jumlah}, berhasil di tambahkan!")
 
             jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
             break
             
     elif pilihan == 2:
-        print("Belum Ada Juga Cuy")
-        input("\ntekan enter untuk lanjut")
+        while True:
+
+            bersihin_layar()
+
+            if not barang_lengkap:
+                print("Data Kosong")
+            elif barang_lengkap:
+                for barang, jumlah in barang_lengkap.items():
+                    print(f"{barang}, dengan jumlah stok: {jumlah}")
+
+            jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
+            break
 
     elif pilihan == 3:
         print("Tunggu update kocak")
