@@ -222,14 +222,21 @@ while True:
             bersihin_layar()
 
             if not barang_lengkap:
-                print("Data Kosong")
+                print("Barang sedang kosong")
+                jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
+                break
             elif barang_lengkap:
-                for barang, jumlah in barang_lengkap.items():
-                    print(f"{barang}, dengan jumlah stok: {jumlah}")
+                for nomor, (barang, atribut) in enumerate(barang_lengkap.items(), start=1):
+                    jumlah = atribut["Stok"]
+                    harga = atribut["Harga"]
+                    kategori = atribut["Kategori"]
+
+                    print(f"{nomor}. {barang}, Stok: {jumlah}, Harga :Rp.{harga},00 , Kategori: {kategori}")
 
             jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
             break
 
+    #Cari Barang
     elif pilihan == 5:
         while True:
             bersihin_layar()
@@ -237,15 +244,27 @@ while True:
             while True:
                 cari_barang = input("Masukkan Nama Barang yang Ingin dicari: ")
                 if cari_barang == "":
-                    print("Data Tidak Boleh Kosong")
-                else:
-                    break
+                    print("Data Tidak Boleh Kosong") 
+                    continue
+                elif barang_lengkap:
+                    for (barang, atribut) in (barang_lengkap.items()):
+                        jumlah = atribut["Stok"]
+                        harga = atribut["Harga"]
+                        kategori = atribut["Kategori"]
+                break
+
 
             if cari_barang not in barang_lengkap:
-                print("Data Barang Tidak Ditemukan")
-            else:
-                hasil_cari = barang_lengkap.get(cari_barang)
-                print(f"Barang dengan nama {cari_barang}, dengan jumlah stok {hasil_cari} berhasil ditemukan")
+                print("Barang Tidak Ditemukan!")
+                balik = input("\nTekan enter untuk kembali mencari")
+                continue
+            elif cari_barang in barang_lengkap:
+                    detail = barang_lengkap.get(cari_barang)
+                    detailStok = detail["Stok"]
+                    detailHarga = detail["Harga"]
+                    detailKategori = detail["Kategori"]
+
+            print(f"Barang dengan nama {cari_barang}, dengan jumlah stok {detailStok}, Harganya Rp.{detailHarga}, Pada kategori {detailKategori} berhasil ditemukan")
             
             jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
             break
