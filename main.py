@@ -270,8 +270,32 @@ while True:
             break
 
     elif pilihan == 6:
-        print("Nah cuma ini doang yang ada wkkwkw")
-        break
+        while True:
+            bersihin_layar()
+        
+            jwbKategori = input("Silahkan Cari Kategori Barang yang ingin Anda Lihat: ")
+            if jwbKategori == "":
+                print("Kategori Wajib Diisi!")
+                input("\n Tekan Enter Untuk Kembali")
+                continue
+
+            ketemu = False
+
+            print(f"Berikut data barang pada kategori {jwbKategori}:")
+
+            for barang in barang_lengkap:
+                detail = barang_lengkap.get(barang)
+                detailStok = detail["Stok"]
+                detailHarga = detail["Harga"]
+                detailKategori = detail["Kategori"]
+
+                if jwbKategori == detailKategori:
+                    print(f"{barang}, Stok: {detailStok}, Harga: {detailHarga}")
+                elif jwbKategori == ketemu:
+                    print("Kategori tidak ditemukan!")
+                    
+            jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
+            break
 
     elif pilihan == 7:
         print("Nah cuma ini doang yang ada wkkwkw")
