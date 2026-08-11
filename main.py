@@ -1,4 +1,5 @@
 import os
+import json
 
 menu_utama = ["Tambah Barang", "Edit Barang", "Hapus Barang", "Lihat Barang", "Cari Barang", "Filter Stok", "Keluar"]
 barang_lengkap = {}
@@ -34,17 +35,21 @@ while True:
 
             while True:
                 bersihin_layar()
-                barang = input("Masukkan Nama Barang: ")
-                if barang == "":
+                nama_barang = input("Masukkan Nama Barang: ")
+                if nama_barang == "":
                     print("Data Tidak Boleh Kosong")
+                    input("\n Tekan Enter....")
+                    continue
                 else:
                     break
 
             while True:
                 bersihin_layar()
-                input_jumlah = input(f"Masukkan Jumlah Barang {barang}: ")
+                input_jumlah = input(f"Masukkan Jumlah Barang {nama_barang}: ")
                 if not input_jumlah.isdigit():
                     print("Masukkan angka bang!")
+                    input("\n Tekan Enter....")
+                    continue
                 else:
                     break
 
@@ -52,9 +57,11 @@ while True:
             
             while True:
                 bersihin_layar()
-                input_harga = input(f"Masukkan Harga Barang {barang}: ")
+                input_harga = input(f"Masukkan Harga Barang {nama_barang}: ")
                 if not input_harga.isdigit():
                     print("Masukkan angka bang!")
+                    input("\n Tekan Enter....")
+                    continue
                 else:
                     break
 
@@ -62,21 +69,26 @@ while True:
 
             while True:
                 bersihin_layar()
-                kategori = input(f"Masukkan Kategori Barang {barang}: ")
+                kategori = input(f"Masukkan Kategori Barang {nama_barang}: ")
                 if kategori == "":
                     print("Wajib Diisi inimah!")
+                    input("\n Tekan Enter....")
+                    continue
                 else:
                     break
 
             bersihin_layar()
 
-            barang_lengkap[barang] = {
+            barang_lengkap [nama_barang]= {
                 "Stok" : jumlah,
                 "Harga" : harga,
                 "Kategori" : kategori
             }
 
-            print(f"Barang dengan nama {barang}, berjumlah {jumlah}, dengan harga Rp.{harga},00, berhasil di tambahkan pada kategori {kategori}!")
+            print(f"Barang dengan nama {nama_barang}, berjumlah {jumlah}, dengan harga Rp.{harga},00, berhasil di tambahkan pada kategori {kategori}!")
+
+            with open("data_barang.json", "w") as file:
+                json.dump(barang_lengkap, file, indent=4)
 
             jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
             break
@@ -86,18 +98,21 @@ while True:
         while True:
             bersihin_layar()
 
+            with open("data_barang.json", "r") as file:
+                barang_lengkap = json.load(file)
+
             if not barang_lengkap:
                 print("Barang sedang kosong")
                 jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
                 break
             elif barang_lengkap:
-                for nomor, (barang, atribut) in enumerate(barang_lengkap.items(), start=1):
+                for nomor, (nama_barang,atribut) in enumerate(barang_lengkap.items(), start=1):
                     jumlah = atribut["Stok"]
                     harga = atribut["Harga"]
                     kategori = atribut["Kategori"]
 
                     daftarKunci = list(barang_lengkap.keys())
-                    print(f"{nomor}. {barang}, Stok: {jumlah}, Harga :Rp.{harga},00 , Kategori: {kategori}")
+                    print(f"{nomor}. {nama_barang}, Stok: {jumlah}, Harga :Rp.{harga},00 , Kategori: {kategori}")
 
             while True:
                 jwbEdit = input("Silahkan Pilih Barang yang ingin di edit: ")
@@ -157,7 +172,7 @@ while True:
 
             del barang_lengkap[targetBarang]
 
-            barang_lengkap[editBarang] ={
+            barang_lengkap [editBarang]={
                 "Stok" : editJumlah,
                 "Harga" : editHarga,
                 "Kategori" : inputeditKategori
@@ -175,18 +190,21 @@ while True:
         while True:
             bersihin_layar()
 
+            with open("data_barang.json", "r") as file:
+                barang_lengkap = json.load(file)
+
             if not barang_lengkap:
                 print("Barang sedang kosong")
-                jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
+                input("\nTekan enter untuk kembali ke menu utama")
                 break
             elif barang_lengkap:
-                for nomor, (barang, atribut) in enumerate(barang_lengkap.items(), start=1):
+                for nomor, (nama_barang, atribut) in enumerate(barang_lengkap.items(), start=1):
                     jumlah = atribut["Stok"]
                     harga = atribut["Harga"]
                     kategori = atribut["Kategori"]
 
                     daftarKunci = list(barang_lengkap.keys())
-                    print(f"{nomor}. {barang}, Stok: {jumlah}, Harga :Rp.{harga},00 , Kategori: {kategori}")
+                    print(f"{nomor}. {nama_barang}, Stok: {jumlah}, Harga :Rp.{harga},00 , Kategori: {kategori}")
 
             while True:
                 jwbHapus = input("Silahkan Pilih Barang yang ingin di Hapus: ")
@@ -221,17 +239,20 @@ while True:
         while True:
             bersihin_layar()
 
+            with open("data_barang.json", "r") as file:
+                barang_lengkap = json.load(file)
+
             if not barang_lengkap:
                 print("Barang sedang kosong")
                 jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
                 break
             elif barang_lengkap:
-                for nomor, (barang, atribut) in enumerate(barang_lengkap.items(), start=1):
+                for nomor, (nama_barang, atribut) in enumerate(barang_lengkap.items(), start=1):
                     jumlah = atribut["Stok"]
                     harga = atribut["Harga"]
                     kategori = atribut["Kategori"]
 
-                    print(f"{nomor}. {barang}, Stok: {jumlah}, Harga :Rp.{harga},00 , Kategori: {kategori}")
+                    print(f"{nomor}. {nama_barang}, Stok: {jumlah}, Harga :Rp.{harga},00 , Kategori: {kategori}")
 
             jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
             break
@@ -241,22 +262,24 @@ while True:
         while True:
             bersihin_layar()
 
+            with open("data_barang.json", "r") as file:
+                barang_lengkap = json.load(file)
+
             while True:
                 cari_barang = input("Masukkan Nama Barang yang Ingin dicari: ")
                 if cari_barang == "":
                     print("Data Tidak Boleh Kosong") 
                     continue
                 elif barang_lengkap:
-                    for (barang, atribut) in (barang_lengkap.items()):
+                    for (nama_barang, atribut) in (barang_lengkap.items()):
                         jumlah = atribut["Stok"]
                         harga = atribut["Harga"]
                         kategori = atribut["Kategori"]
                 break
 
-
             if cari_barang not in barang_lengkap:
                 print("Barang Tidak Ditemukan!")
-                balik = input("\nTekan enter untuk kembali mencari")
+                input("\nTekan enter untuk kembali mencari")
                 continue
             elif cari_barang in barang_lengkap:
                     detail = barang_lengkap.get(cari_barang)
@@ -272,6 +295,9 @@ while True:
     elif pilihan == 6:
         while True:
             bersihin_layar()
+
+            with open("data_barang.json", "r") as file:
+                barang_lengkap = json.load(file)
         
             jwbKategori = input("Silahkan Cari Kategori Barang yang ingin Anda Lihat: ")
             if jwbKategori == "":
@@ -283,14 +309,14 @@ while True:
 
             print(f"Berikut data barang pada kategori {jwbKategori}:")
 
-            for barang in barang_lengkap:
-                detail = barang_lengkap.get(barang)
+            for nama_barang in barang_lengkap:
+                detail = barang_lengkap.get(nama_barang)
                 detailStok = detail["Stok"]
                 detailHarga = detail["Harga"]
                 detailKategori = detail["Kategori"]
 
                 if jwbKategori == detailKategori:
-                    print(f"{barang}, Stok: {detailStok}, Harga: {detailHarga}")
+                    print(f"{nama_barang}, Stok: {detailStok}, Harga: {detailHarga}")
                 elif jwbKategori == ketemu:
                     print("Kategori tidak ditemukan!")
                     
@@ -298,9 +324,10 @@ while True:
             break
 
     elif pilihan == 7:
-        print("Nah cuma ini doang yang ada wkkwkw")
+        print("Terimakasih")
         break
 
     else:
         print("Pilih yang bener bang")
         input("\ntekan enter untuk lanjut")
+        continue
