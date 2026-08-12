@@ -305,23 +305,16 @@ while True:
                         jumlah = atribut["Stok"]
                         harga = atribut["Harga"]
                         kategori = atribut["Kategori"]
+                        if cari_barang == nama_barang:
+                            print(f"Kode Barang: {kode_barang}, Nama Barang: {nama_barang}, Jumlah Stok: {jumlah}, Harga: {harga}, Kategori: {kategori}")
+                            continue
+                        elif cari_barang != nama_barang:
+                            break
                 break
-
-            if cari_barang not in barang_lengkap:
-                print("Barang Tidak Ditemukan!")
-                input("\nTekan enter untuk kembali mencari")
-                continue
-            elif cari_barang in barang_lengkap:
-                    detail = barang_lengkap.get(cari_barang)
-                    detailStok = detail["Stok"]
-                    detailHarga = detail["Harga"]
-                    detailKategori = detail["Kategori"]
-
-            print(f"Barang dengan nama {cari_barang}, dengan jumlah stok {detailStok}, Harganya Rp.{detailHarga}, Pada kategori {detailKategori} berhasil ditemukan")
-            
-            jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
+            input("\n Kembali Ke Menu Utama")
             break
 
+    #Filter Barang
     elif pilihan == 6:
         while True:
             bersihin_layar()
@@ -335,22 +328,24 @@ while True:
                 input("\n Tekan Enter Untuk Kembali")
                 continue
 
-            ketemu = False
-
             print(f"Berikut data barang pada kategori {jwbKategori}:")
 
-            for nama_barang in barang_lengkap:
-                detail = barang_lengkap.get(nama_barang)
-                detailStok = detail["Stok"]
-                detailHarga = detail["Harga"]
-                detailKategori = detail["Kategori"]
+            while True:
+                for kode_barang in barang_lengkap:
+                    detail = barang_lengkap.get(kode_barang)
+                    detailNamaBarang = detail["Nama Barang"]
+                    detailStok = detail["Stok"]
+                    detailHarga = detail["Harga"]
+                    detailKategori = detail["Kategori"]
 
-                if jwbKategori == detailKategori:
-                    print(f"{nama_barang}, Stok: {detailStok}, Harga: {detailHarga}")
-                elif jwbKategori == ketemu:
-                    print("Kategori tidak ditemukan!")
+                    if jwbKategori == detailKategori:
+                        print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: {detailHarga}")
+                        continue
+                    else:
+                        break
+                break
                     
-            jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
+            input("\nTekan enter untuk kembali ke menu utama")
             break
 
     elif pilihan == 7:

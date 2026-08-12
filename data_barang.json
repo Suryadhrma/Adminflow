@@ -4,5 +4,19 @@
         "Stok": 20,
         "Harga": 2700000,
         "Kategori": "Laptop"
+    },
+
+    "LD0002": {
+        "Nama Barang": "Macbook Neo",
+        "Stok": 20,
+        "Harga": 8000000,
+        "Kategori": "Laptop"
+    },
+
+    "SP0001": {
+        "Nama Barang": "Apple IPhone 13",
+        "Stok": 20,
+        "Harga": 6000000,
+        "Kategori": "Smartphone"
     }
 }
