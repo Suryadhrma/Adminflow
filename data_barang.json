@@ -1,7 +1,8 @@
 {
-    "tes": {
-        "Stok": 23,
-        "Harga": 230000,
-        "Kategori": "tas"
+    "LD0001": {
+        "Nama Barang": "Dell Latitude 5300",
+        "Stok": 20,
+        "Harga": 2700000,
+        "Kategori": "Laptop"
     }
 }
