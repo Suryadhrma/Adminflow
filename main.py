@@ -356,6 +356,7 @@ while True:
             input("\nTekan Enter Untuk Kembali ke Menu Utama")
             break
 
+    #Urut Harga
     elif pilihan == 7:
         while True: 
             bersihin_layar()
@@ -367,48 +368,44 @@ while True:
 
             inputan_user = input("Pilih Menu Pengurutan: ")
 
-            if not inputan_user.isdigit:
+            if not inputan_user.isdigit():
                 print("Masukkan Angka")
 
             input_sorting = int(inputan_user)
 
             if input_sorting == 1:
                 bersihin_layar()
-                while True:
-                    hasilurutMurah = sorted(
-                        barang_lengkap.items(),
-                        key=lambda x: x[1]["Harga"]
-                    )
+
+                hasilurutMurah = sorted(
+                    barang_lengkap.items(),
+                    key=lambda x: x[1]["Harga"]
+                )
 
 
-                    for kode_barang, detail in hasilurutMurah:
-                            detail = barang_lengkap.get(kode_barang)
-                            detailNamaBarang = detail["Nama Barang"]
-                            detailStok = detail["Stok"]
-                            detailHarga = detail["Harga"]
-                            detailKategori = detail["Kategori"]
+                for kode_barang, detail in hasilurutMurah:
+                    detailNamaBarang = detail["Nama Barang"]
+                    detailStok = detail["Stok"]
+                    detailHarga = detail["Harga"]
+                    detailKategori = detail["Kategori"]
 
-                            print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: Rp.{detailHarga},00")
-                    break
+                    print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: Rp.{detailHarga},00")
                             
             elif input_sorting == 2:
-                while True:
-                    bersihin_layar()
-                    hasilurutMahal = sorted(
-                        barang_lengkap.items(),
-                        key=lambda x: x[1]["Harga"],
-                        reverse=True
-                    )
+                bersihin_layar()
 
-                    for kode_barang, detail in hasilurutMahal:
-                            detail = barang_lengkap.get(kode_barang)
-                            detailNamaBarang = detail["Nama Barang"]
-                            detailStok = detail["Stok"]
-                            detailHarga = detail["Harga"]
-                            detailKategori = detail["Kategori"]
+                hasilurutMahal = sorted(
+                    barang_lengkap.items(),
+                    key=lambda x: x[1]["Harga"],
+                    reverse=True
+                )
 
-                            print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: Rp.{detailHarga},00")
-                    break
+                for kode_barang, detail in hasilurutMahal:
+                    detailNamaBarang = detail["Nama Barang"]
+                    detailStok = detail["Stok"]
+                    detailHarga = detail["Harga"]
+                    detailKategori = detail["Kategori"]
+
+                    print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: Rp.{detailHarga},00")
 
             input("\nTekan Enter Untuk Kembali ke Menu Utama")
             break
