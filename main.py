@@ -1,7 +1,8 @@
 import os
 import json
 
-menu_utama = ["Tambah Barang", "Edit Barang", "Hapus Barang", "Lihat Barang", "Cari Barang", "Filter Stok", "Keluar"]
+menu_utama = ["Tambah Barang", "Edit Barang", "Hapus Barang", "Lihat Barang", "Cari Barang", "Filter Stok", "Urutkan Harga", "Keluar"]
+menu_sorting =["Urutkan Harga Dari Yang Termurah", "Urutkan Harga Dari Yang Termahal"]
 barang_lengkap = {}
 
 def bersihin_layar():
@@ -14,6 +15,11 @@ def tampilan_menu ():
     print("===== MENU UTAMA =====")
     for nomor, menu in enumerate(menu_utama, start=1):
         print(f"{nomor}. {menu}")
+
+def tampilan_menu_sorting ():
+    print("===== MENU PENGURUTAN =====")
+    for nomor, menup in enumerate(menu_sorting, start=1):
+        print(f"{nomor}. {menup}")
 
 while True:
     bersihin_layar()
@@ -311,7 +317,7 @@ while True:
                     print(f"Kode Barang: {kode_barang}, Nama Barang: {nama_barang}, Jumlah Stok: {jumlah}, Harga: {harga}, Kategori: {kategori}")
                     hasil_cari = True
                     
-            if hasil_cari == False:
+            if not hasil_cari:
                 print("Barang Tidak Ditemukan")
 
             input("\n Kembali Ke Menu Utama")
@@ -344,13 +350,56 @@ while True:
                     barang_ditemukan = True
                     print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: {detailHarga}")
 
-            if barang_ditemukan == False:
-                print("Tidak ditemukan")
+            if not barang_ditemukan:
+                print("Tidak ditemukan Barang")
 
             input("\nTekan Enter Untuk Kembali ke Menu Utama")
             break
 
     elif pilihan == 7:
+        while True: 
+            bersihin_layar()
+
+            with open("data_barang.json", "r") as file:
+                barang_lengkap = json.load(file)
+
+            tampilan_menu_sorting()
+
+            inputan_user = input("Pilih Menu Pengurutan: ")
+
+            if not inputan_user.isdigit:
+                print("Masukkan Angka")
+
+            input_sorting = int(inputan_user)
+
+            if input_sorting == 1:
+                while True:
+                    hasilurutMurah = sorted(
+                        barang_lengkap.items(),
+                        key=lambda x: x[1]["Harga"]
+                    )
+
+
+                    datarapi_Murah = dict(hasilurutMurah)
+                    print(json.dumps(datarapi_Murah, indent=4))
+                    break
+
+            elif input_sorting == 2:
+                while True:
+                    hasilurutMahal = sorted(
+                        barang_lengkap.items(),
+                        key=lambda x: x[1]["Harga"],
+                        reverse=True
+                    )
+
+                    datarapi_Mahal = dict(hasilurutMahal)
+                    print(json.dumps(datarapi_Mahal, indent=4))
+                    break
+
+            input("\nTekan Enter Untuk Kembali ke Menu Utama")
+            break
+
+    elif pilihan == 8:
         print("Terimakasih")
         break
 
