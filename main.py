@@ -373,6 +373,7 @@ while True:
             input_sorting = int(inputan_user)
 
             if input_sorting == 1:
+                bersihin_layar()
                 while True:
                     hasilurutMurah = sorted(
                         barang_lengkap.items(),
@@ -380,20 +381,33 @@ while True:
                     )
 
 
-                    datarapi_Murah = dict(hasilurutMurah)
-                    print(json.dumps(datarapi_Murah, indent=4))
-                    break
+                    for kode_barang, detail in hasilurutMurah:
+                            detail = barang_lengkap.get(kode_barang)
+                            detailNamaBarang = detail["Nama Barang"]
+                            detailStok = detail["Stok"]
+                            detailHarga = detail["Harga"]
+                            detailKategori = detail["Kategori"]
 
+                            print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: Rp.{detailHarga},00")
+                    break
+                            
             elif input_sorting == 2:
                 while True:
+                    bersihin_layar()
                     hasilurutMahal = sorted(
                         barang_lengkap.items(),
                         key=lambda x: x[1]["Harga"],
                         reverse=True
                     )
 
-                    datarapi_Mahal = dict(hasilurutMahal)
-                    print(json.dumps(datarapi_Mahal, indent=4))
+                    for kode_barang, detail in hasilurutMahal:
+                            detail = barang_lengkap.get(kode_barang)
+                            detailNamaBarang = detail["Nama Barang"]
+                            detailStok = detail["Stok"]
+                            detailHarga = detail["Harga"]
+                            detailKategori = detail["Kategori"]
+
+                            print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: Rp.{detailHarga},00")
                     break
 
             input("\nTekan Enter Untuk Kembali ke Menu Utama")
