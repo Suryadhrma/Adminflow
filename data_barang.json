@@ -39,5 +39,12 @@
         "Stok": 20,
         "Harga": 6000000,
         "Kategori": "Smartphone"
+    },
+
+    "SP0004": {
+        "Nama Barang": "Apple IPhone 15",
+        "Stok": 20,
+        "Harga": 6000000,
+        "Kategori": "Smartphone"
     }
 }

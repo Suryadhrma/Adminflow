@@ -294,23 +294,26 @@ while True:
             with open("data_barang.json", "r") as file:
                 barang_lengkap = json.load(file)
 
-            while True:
-                cari_barang = input("Masukkan Nama Barang yang Ingin dicari: ")
-                if cari_barang == "":
-                    print("Data Tidak Boleh Kosong") 
-                    continue
-                elif barang_lengkap:
-                    for (kode_barang, atribut) in (barang_lengkap.items()):
-                        nama_barang = atribut["Nama Barang"]
-                        jumlah = atribut["Stok"]
-                        harga = atribut["Harga"]
-                        kategori = atribut["Kategori"]
-                        if cari_barang == nama_barang:
-                            print(f"Kode Barang: {kode_barang}, Nama Barang: {nama_barang}, Jumlah Stok: {jumlah}, Harga: {harga}, Kategori: {kategori}")
-                            continue
-                        elif cari_barang != nama_barang:
-                            break
-                break
+            cari_barang = input("Masukkan Nama Barang yang Ingin dicari: ")
+            if cari_barang == "":
+                print("Data Tidak Boleh Kosong") 
+                input("Tekan Enter Untuk Lanjut")
+                continue
+
+            hasil_cari = False
+
+            for (kode_barang, atribut) in (barang_lengkap.items()):
+                nama_barang = atribut["Nama Barang"]
+                jumlah = atribut["Stok"]
+                harga = atribut["Harga"]
+                kategori = atribut["Kategori"]
+                if cari_barang == nama_barang:
+                    print(f"Kode Barang: {kode_barang}, Nama Barang: {nama_barang}, Jumlah Stok: {jumlah}, Harga: {harga}, Kategori: {kategori}")
+                    hasil_cari = True
+                    
+            if hasil_cari == False:
+                print("Barang Tidak Ditemukan")
+
             input("\n Kembali Ke Menu Utama")
             break
 
@@ -328,24 +331,23 @@ while True:
                 input("\n Tekan Enter Untuk Kembali")
                 continue
 
-            print(f"Berikut data barang pada kategori {jwbKategori}:")
+            barang_ditemukan = False
 
-            while True:
-                for kode_barang in barang_lengkap:
-                    detail = barang_lengkap.get(kode_barang)
-                    detailNamaBarang = detail["Nama Barang"]
-                    detailStok = detail["Stok"]
-                    detailHarga = detail["Harga"]
-                    detailKategori = detail["Kategori"]
+            for kode_barang in barang_lengkap:
+                detail = barang_lengkap.get(kode_barang)
+                detailNamaBarang = detail["Nama Barang"]
+                detailStok = detail["Stok"]
+                detailHarga = detail["Harga"]
+                detailKategori = detail["Kategori"]
+                
+                if jwbKategori == detailKategori:
+                    barang_ditemukan = True
+                    print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: {detailHarga}")
 
-                    if jwbKategori == detailKategori:
-                        print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: {detailHarga}")
-                        continue
-                    else:
-                        break
-                break
-                    
-            input("\nTekan enter untuk kembali ke menu utama")
+            if barang_ditemukan == False:
+                print("Tidak ditemukan")
+
+            input("\nTekan Enter Untuk Kembali ke Menu Utama")
             break
 
     elif pilihan == 7:
