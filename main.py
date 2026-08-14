@@ -115,8 +115,13 @@ while True:
         while True:
             bersihin_layar()
 
-            with open("data_barang.json", "r") as file:
-                barang_lengkap = json.load(file)
+            try:
+                with open("data_barang.json", "r") as file:
+                    barang_lengkap = json.load(file)
+            except json.JSONDecodeError:
+                print("Error Format JSON Tidak Valid")
+            except Exception as e:
+                print("Terjadi Kesalahan")
 
             if not barang_lengkap:
                 print("Barang sedang kosong")
