@@ -1,12 +1,15 @@
 import sqlite3
+import os
 
 def inisialisasi_database():
-    koneksi = sqlite3.connect("database.db")
+    db_path = os.path.join("src/database/database.db")
+
+    koneksi = sqlite3.connect(db_path)
     kursor = koneksi.cursor()
 
     kursor.execute('''
-        CREATE TABLE IF NOT EXIST Barang (
-        kode_barang TEXT PRIMARY KEY AUTOINCREMENT,
+        CREATE TABLE Barang (
+        kode_barang TEXT PRIMARY KEY,
         nama_barang TEXT,
         stok INTEGER,
         kategori TEXT
@@ -14,6 +17,8 @@ def inisialisasi_database():
     ''')
 
     koneksi.close()
+
+inisialisasi_database()
 
 
 
