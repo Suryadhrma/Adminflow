@@ -21,6 +21,30 @@ def tampilan_menu_sorting ():
     for nomor, menup in enumerate(menu_sorting, start=1):
         print(f"{nomor}. {menup}")
 
+try:
+    with open("data_barang.json", "r") as file:
+        barang_lengkap = json.load(file)
+except json.JSONDecodeError:
+    print("Error Format JSON Tidak Valid")
+except Exception as e:
+    print("Terjadi Kesalahan")
+
+def cari_barang (barang, cari_barang):
+    hasil_cari = False
+
+    for (kode_barang, atribut) in (barang.items()):
+        nama_barang = atribut["Nama Barang"]
+        jumlah = atribut["Stok"]
+        harga = atribut["Harga"]
+        kategori = atribut["Kategori"]
+        if cari_barang == nama_barang:
+            print(f"Kode Barang: {kode_barang}, Nama Barang: {nama_barang}, Jumlah Stok: {jumlah}, Harga: {harga}, Kategori: {kategori}")
+            hasil_cari = True
+
+    if not hasil_cari:
+        print("Barang Tidak Ditemukan")
+    return hasil_cari
+
 while True:
     bersihin_layar()
     
@@ -305,25 +329,13 @@ while True:
             with open("data_barang.json", "r") as file:
                 barang_lengkap = json.load(file)
 
-            cari_barang = input("Masukkan Nama Barang yang Ingin dicari: ")
-            if cari_barang == "":
+            inputcari_barang = input("Masukkan Nama Barang yang Ingin dicari: ")
+            if inputcari_barang == "":
                 print("Data Tidak Boleh Kosong") 
                 input("Tekan Enter Untuk Lanjut")
                 continue
 
-            hasil_cari = False
-
-            for (kode_barang, atribut) in (barang_lengkap.items()):
-                nama_barang = atribut["Nama Barang"]
-                jumlah = atribut["Stok"]
-                harga = atribut["Harga"]
-                kategori = atribut["Kategori"]
-                if cari_barang == nama_barang:
-                    print(f"Kode Barang: {kode_barang}, Nama Barang: {nama_barang}, Jumlah Stok: {jumlah}, Harga: {harga}, Kategori: {kategori}")
-                    hasil_cari = True
-                    
-            if not hasil_cari:
-                print("Barang Tidak Ditemukan")
+            hasil = cari_barang(barang_lengkap, inputcari_barang)
 
             input("\n Kembali Ke Menu Utama")
             break
