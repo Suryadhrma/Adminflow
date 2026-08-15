@@ -1,9 +1,15 @@
 import os
-import json
+import sqlite3
 
 menu_utama = ["Tambah Barang", "Edit Barang", "Hapus Barang", "Lihat Barang", "Cari Barang", "Filter Stok", "Urutkan Harga", "Keluar"]
 menu_sorting =["Urutkan Harga Dari Yang Termurah", "Urutkan Harga Dari Yang Termahal"]
 barang_lengkap = {}
+
+
+db_path = os.path.join("src/database/database.db")
+
+koneksi = sqlite3.connect(db_path)
+kursor = koneksi.cursor()
 
 def bersihin_layar():
     if os.name == 'nt':
@@ -20,14 +26,6 @@ def tampilan_menu_sorting ():
     print("===== MENU PENGURUTAN =====")
     for nomor, menup in enumerate(menu_sorting, start=1):
         print(f"{nomor}. {menup}")
-
-try:
-    with open("data_barang.json", "r") as file:
-        barang_lengkap = json.load(file)
-except json.JSONDecodeError:
-    print("Error Format JSON Tidak Valid")
-except Exception as e:
-    print("Terjadi Kesalahan")
 
 def cari_barang (barang, cari_barang):
     hasil_cari = False
@@ -119,17 +117,12 @@ while True:
 
             bersihin_layar()
 
-            barang_lengkap [kode_barang]= {
-                "Nama Barang" : nama_barang,
-                "Stok" : jumlah,
-                "Harga" : harga,
-                "Kategori" : kategori
-            }
+            kursor.execute("INSERT INTO Barang (kode_barang, nama_barang, stok, harga, kategori) VALUES (?, ?, ?, ?, ?)", (kode_barang, nama_barang, jumlah, harga, kategori))
 
             print(f"Barang dengan kode {kode_barang}, nama {nama_barang}, berjumlah {jumlah}, dengan harga Rp.{harga},00, berhasil di tambahkan pada kategori {kategori}!")
 
-            with open("data_barang.json", "w") as file:
-                json.dump(barang_lengkap, file, indent=4)
+            koneksi.commit()
+            koneksi.close()
 
             jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
             break
@@ -233,6 +226,8 @@ while True:
                 "Harga" : editHarga,
                 "Kategori" : inputeditKategori
             }
+
+            kursor
 
             with open("data_barang.json", "w") as file:
                 json.dump(barang_lengkap, file, indent=4)

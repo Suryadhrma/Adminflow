@@ -12,6 +12,7 @@ def inisialisasi_database():
         kode_barang TEXT PRIMARY KEY,
         nama_barang TEXT,
         stok INTEGER,
+        harga INTEGER,
         kategori TEXT
         )
     ''')
