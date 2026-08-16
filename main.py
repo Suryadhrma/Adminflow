@@ -132,14 +132,6 @@ while True:
         while True:
             bersihin_layar()
 
-            try:
-                with open("data_barang.json", "r") as file:
-                    barang_lengkap = json.load(file)
-            except json.JSONDecodeError:
-                print("Error Format JSON Tidak Valid")
-            except Exception as e:
-                print("Terjadi Kesalahan")
-
             if not barang_lengkap:
                 print("Barang sedang kosong")
                 jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
@@ -244,9 +236,6 @@ while True:
         while True:
             bersihin_layar()
 
-            with open("data_barang.json", "r") as file:
-                barang_lengkap = json.load(file)
-
             if not barang_lengkap:
                 print("Barang sedang kosong")
                 input("\nTekan enter untuk kembali ke menu utama")
@@ -281,9 +270,6 @@ while True:
             targetBarang = daftarKunci[listAsli]
 
             del barang_lengkap[targetBarang]
-
-            with open("data_barang.json", "w") as file:
-                json.dump(barang_lengkap, file, indent=4)
 
             bersihin_layar()
 
