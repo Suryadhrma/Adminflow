@@ -210,19 +210,10 @@ while True:
                     continue
                 break
 
-            del barang_lengkap[targetBarang]
+            kursor.execute("INSERT INTO Barang (kode_barang, nama_barang, stok, harga, kategori) VALUES (?, ?, ?, ?, ?)", (kode_barang, nama_barang, jumlah, harga, kategori))
 
-            barang_lengkap [editkodeBarang]={
-                "Nama Barang" : editBarang,
-                "Stok" : editJumlah,
-                "Harga" : editHarga,
-                "Kategori" : inputeditKategori
-            }
-
-            kursor
-
-            with open("data_barang.json", "w") as file:
-                json.dump(barang_lengkap, file, indent=4)
+            koneksi.commit()
+            koneksi.close()
 
             bersihin_layar()
 
