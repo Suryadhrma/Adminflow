@@ -168,14 +168,6 @@ while True:
             bersihin_layar()
 
             while True:
-                editkodeBarang = input("\n Ubah Kode Barangnya Menjadi: ")
-                if editkodeBarang == "":
-                    print("\n Kode Barangnya wajib di isi!")
-                    continue
-                else:
-                    break
-
-            while True:
                 editBarang = input("\n Ubah Nama Barangnya Menjadi: ")
                 if editBarang == "":
                     print("\n Nama Barangnya wajib di isi!")
@@ -212,11 +204,11 @@ while True:
                     continue
                 break
             
-            data_update = (editkodeBarang, editBarang, editJumlah, editHarga, inputeditKategori, targetBarang, editkodeBarang)
+            data_update = (editBarang, editJumlah, editHarga, inputeditKategori, targetBarang[0])
 
             kursor.execute('''
             UPDATE Barang
-            set kode_barang = ?, nama_barang = ?, stok = ?, harga = ?, kategori = ?
+            set nama_barang = ?, stok = ?, harga = ?, kategori = ?
             WHERE kode_barang = ?
             ''', data_update)
 
