@@ -213,7 +213,6 @@ while True:
             ''', data_update)
 
             koneksi.commit()
-            koneksi.close()
 
             bersihin_layar()
 
@@ -227,19 +226,7 @@ while True:
         while True:
             bersihin_layar()
 
-            if not barang_lengkap:
-                print("Barang sedang kosong")
-                input("\nTekan enter untuk kembali ke menu utama")
-                break
-            elif barang_lengkap:
-                for nomor, (kode_barang, atribut) in enumerate(barang_lengkap.items(), start=1):
-                    nama_barang = atribut["Nama Barang"]
-                    jumlah = atribut["Stok"]
-                    harga = atribut["Harga"]
-                    kategori = atribut["Kategori"]
-
-                    daftarKunci = list(barang_lengkap.keys())
-                    print(f"{nomor}. {nama_barang}, Stok: {jumlah}, Harga :Rp.{harga},00 , Kategori: {kategori}")
+            barang_lengkap = bongkar_db()
 
             while True:
                 jwbHapus = input("Silahkan Pilih Barang yang ingin di Hapus: ")
@@ -252,15 +239,18 @@ while True:
                 if barangPilihanhps <= 0:
                     print("Silahkan Pilih Barang Yang tersedia!")
                     continue
-                elif barangPilihanhps > len(daftarKunci):
+                elif barangPilihanhps > len(barang_lengkap):
                     print("Pilih Barang yang Tersedia!")
                     continue
                 break
 
             listAsli = barangPilihanhps - 1
-            targetBarang = daftarKunci[listAsli]
+            targetBarang = barang_lengkap[listAsli]
 
-            del barang_lengkap[targetBarang]
+            kursor.execute('''
+                DELETE FROM Barang
+                WHERE kode_barang = ?
+            ''', targetBarang[0])
 
             bersihin_layar()
 
@@ -401,6 +391,7 @@ while True:
 
     elif pilihan == 8:
         print("Terimakasih")
+        koneksi.close()
         break
 
     else:
