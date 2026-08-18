@@ -3,8 +3,6 @@ import sqlite3
 
 menu_utama = ["Tambah Barang", "Edit Barang", "Hapus Barang", "Lihat Barang", "Cari Barang", "Filter Stok", "Urutkan Harga", "Keluar"]
 menu_sorting =["Urutkan Harga Dari Yang Termurah", "Urutkan Harga Dari Yang Termahal"]
-barang_lengkap = {}
-
 
 db_path = os.path.join("src/database/database.db")
 
@@ -26,6 +24,20 @@ def tampilan_menu_sorting ():
     print("===== MENU PENGURUTAN =====")
     for nomor, menup in enumerate(menu_sorting, start=1):
         print(f"{nomor}. {menup}")
+
+def bongkar_db ():
+    list_barang = []
+
+    try:
+        kursor.execute("SELECT * FROM Barang")
+        for barang in enumerate(kursor, start=1):
+            print(f"{barang[0]}. Kode Barang: {barang[1][0]} | Nama Barang: {barang[1][1]} | Stok: {barang[1][2]} | Harga: {barang[1][3]} |")
+            list_barang.append(barang)
+
+        return list_barang
+    except TimeoutError:
+        print("Database Tidak Merespon")
+        return
 
 def cari_barang (barang, cari_barang):
     hasil_cari = False
@@ -132,19 +144,7 @@ while True:
         while True:
             bersihin_layar()
 
-            if not barang_lengkap:
-                print("Barang sedang kosong")
-                jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
-                break
-            elif barang_lengkap:
-                for nomor, (kode_barang,atribut) in enumerate(barang_lengkap.items(), start=1):
-                    nama_barang = atribut["Nama Barang"]
-                    jumlah = atribut["Stok"]
-                    harga = atribut["Harga"]
-                    kategori = atribut["Kategori"]
-
-                    daftarKunci = list(barang_lengkap.keys())
-                    print(f"{nomor}. {kode_barang} {nama_barang}, Stok: {jumlah}, Harga :Rp.{harga},00 , Kategori: {kategori}")
+            barang_lengkap = bongkar_db()
 
             while True:
                 jwbEdit = input("Silahkan Pilih Barang yang ingin di edit: ")
@@ -157,13 +157,15 @@ while True:
                 if barangPilihan <= 0:
                     print("Silahkan Pilih Barang Yang tersedia!")
                     continue
-                elif barangPilihan > len(daftarKunci):
+                elif barangPilihan > len(barang_lengkap):
                     print("Pilih Barang yang Tersedia!")
                     continue
                 break
 
             listAsli = barangPilihan - 1
-            targetBarang = daftarKunci[listAsli]
+            targetBarang = barang_lengkap[listAsli]
+
+            bersihin_layar()
 
             while True:
                 editkodeBarang = input("\n Ubah Kode Barangnya Menjadi: ")
@@ -209,20 +211,17 @@ while True:
                     print("\n Harus Diisi!")
                     continue
                 break
+            
+            data_update = (editkodeBarang, editBarang, editJumlah, editHarga, inputeditKategori, targetBarang, editkodeBarang)
 
-            del barang_lengkap[targetBarang]
+            kursor.execute('''
+            UPDATE Barang
+            set kode_barang = ?, nama_barang = ?, stok = ?, harga = ?, kategori = ?
+            WHERE kode_barang = ?
+            ''', data_update)
 
-            barang_lengkap [editkodeBarang]={
-                "Nama Barang" : editBarang,
-                "Stok" : editJumlah,
-                "Harga" : editHarga,
-                "Kategori" : inputeditKategori
-            }
-
-            kursor
-
-            with open("data_barang.json", "w") as file:
-                json.dump(barang_lengkap, file, indent=4)
+            koneksi.commit()
+            koneksi.close()
 
             bersihin_layar()
 
