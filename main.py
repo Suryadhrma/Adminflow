@@ -29,6 +29,7 @@ def bongkar_db ():
     list_barang = []
 
     try:
+        kursor.execute("SELECT * FROM Barang")
         for barang in enumerate(kursor, start=1):
             print(f"{barang[0]}. Kode Barang: {barang[1][0]} | Nama Barang: {barang[1][1]} | Stok: {barang[1][2]} | Harga: {barang[1][3]} |")
             list_barang.append(barang)
@@ -267,7 +268,7 @@ while True:
             kursor.execute('''
                 DELETE FROM Barang
                 WHERE kode_barang = ?
-            ''', targetBarang[0])
+            ''', targetBarang[0],)
 
             bersihin_layar()
 
