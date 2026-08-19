@@ -29,7 +29,6 @@ def bongkar_db ():
     list_barang = []
 
     try:
-        kursor.execute("SELECT * FROM Barang")
         for barang in enumerate(kursor, start=1):
             print(f"{barang[0]}. Kode Barang: {barang[1][0]} | Nama Barang: {barang[1][1]} | Stok: {barang[1][2]} | Harga: {barang[1][3]} |")
             list_barang.append(barang)
@@ -39,21 +38,40 @@ def bongkar_db ():
         print("Database Tidak Merespon")
         return
 
-def cari_barang (barang, cari_barang):
+def getbarangbyKode():
+    list_barang = []
+
+    try:
+        kursor.execute("SELECT * FROM Barang")
+        for barang in kursor:
+            list_barang.append(barang)
+        return list_barang
+    except sqlite3.Error as e:
+        print(f"Database Tidak Merespon: {e}")
+        return []
+
+def cari_barang (barang, carinama_barang):
     hasil_cari = False
 
-    for (kode_barang, atribut) in (barang.items()):
-        nama_barang = atribut["Nama Barang"]
-        jumlah = atribut["Stok"]
-        harga = atribut["Harga"]
-        kategori = atribut["Kategori"]
-        if cari_barang == nama_barang:
-            print(f"Kode Barang: {kode_barang}, Nama Barang: {nama_barang}, Jumlah Stok: {jumlah}, Harga: {harga}, Kategori: {kategori}")
+    for nomor, brg in enumerate(barang, start= 1):
+        if carinama_barang.lower() == brg[1].lower():
+            print(f"{nomor}. Kode Barang: {brg[0]} | Nama Barang: {brg[1]} | Stok: {brg[2]} | Harga: {brg[3]} | Kategori: {brg[4]}")
             hasil_cari = True
-
     if not hasil_cari:
         print("Barang Tidak Ditemukan")
     return hasil_cari
+
+def cari_kategori (barang, carinamakategori):
+    barang_ditemukan = False
+
+    for nomor,brg in enumerate(barang, start=1):
+        if carinamakategori.lower() == brg[4].lower():
+            barang_ditemukan = True
+            print(f"{nomor}. Kode Barang: {brg[0]} | Nama Barang: {brg[1]} | Stok: {brg[2]} | Harga: {brg[3]} | Kategori: {brg[4]}")
+
+    if not barang_ditemukan:
+        print("Tidak ditemukan Barang")
+    return barang_ditemukan
 
 while True:
     bersihin_layar()
@@ -134,7 +152,6 @@ while True:
             print(f"Barang dengan kode {kode_barang}, nama {nama_barang}, berjumlah {jumlah}, dengan harga Rp.{harga},00, berhasil di tambahkan pada kategori {kategori}!")
 
             koneksi.commit()
-            koneksi.close()
 
             jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
             break
@@ -264,21 +281,7 @@ while True:
         while True:
             bersihin_layar()
 
-            with open("data_barang.json", "r") as file:
-                barang_lengkap = json.load(file)
-
-            if not barang_lengkap:
-                print("Barang sedang kosong")
-                jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
-                break
-            elif barang_lengkap:
-                for nomor, (kode_barang, atribut) in enumerate(barang_lengkap.items(), start=1):
-                    nama_barang = atribut["Nama Barang"]
-                    jumlah = atribut["Stok"]
-                    harga = atribut["Harga"]
-                    kategori = atribut["Kategori"]
-
-                    print(f"{nomor}. {kode_barang} {nama_barang}, Stok: {jumlah}, Harga :Rp.{harga},00 , Kategori: {kategori}")
+            barang_lengkap = bongkar_db()
 
             jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
             break
@@ -288,15 +291,14 @@ while True:
         while True:
             bersihin_layar()
 
-            with open("data_barang.json", "r") as file:
-                barang_lengkap = json.load(file)
+            barang_lengkap = getbarangbyKode()
 
             inputcari_barang = input("Masukkan Nama Barang yang Ingin dicari: ")
             if inputcari_barang == "":
                 print("Data Tidak Boleh Kosong") 
                 input("Tekan Enter Untuk Lanjut")
                 continue
-
+            
             hasil = cari_barang(barang_lengkap, inputcari_barang)
 
             input("\n Kembali Ke Menu Utama")
@@ -307,8 +309,7 @@ while True:
         while True:
             bersihin_layar()
 
-            with open("data_barang.json", "r") as file:
-                barang_lengkap = json.load(file)
+            barang_lengkap = getbarangbyKode()
         
             jwbKategori = input("Silahkan Cari Kategori Barang yang ingin Anda Lihat: ")
             if jwbKategori == "":
@@ -316,21 +317,7 @@ while True:
                 input("\n Tekan Enter Untuk Kembali")
                 continue
 
-            barang_ditemukan = False
-
-            for kode_barang in barang_lengkap:
-                detail = barang_lengkap.get(kode_barang)
-                detailNamaBarang = detail["Nama Barang"]
-                detailStok = detail["Stok"]
-                detailHarga = detail["Harga"]
-                detailKategori = detail["Kategori"]
-                
-                if jwbKategori == detailKategori:
-                    barang_ditemukan = True
-                    print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: {detailHarga}")
-
-            if not barang_ditemukan:
-                print("Tidak ditemukan Barang")
+            hasil = cari_kategori(barang_lengkap, jwbKategori)
 
             input("\nTekan Enter Untuk Kembali ke Menu Utama")
             break
@@ -340,8 +327,7 @@ while True:
         while True: 
             bersihin_layar()
 
-            with open("data_barang.json", "r") as file:
-                barang_lengkap = json.load(file)
+            barang_lengkap = getbarangbyKode()
 
             tampilan_menu_sorting()
 
@@ -356,35 +342,24 @@ while True:
                 bersihin_layar()
 
                 hasilurutMurah = sorted(
-                    barang_lengkap.items(),
-                    key=lambda x: x[1]["Harga"]
+                    barang_lengkap,
+                    key=lambda x: x[3]
                 )
 
-
-                for kode_barang, detail in hasilurutMurah:
-                    detailNamaBarang = detail["Nama Barang"]
-                    detailStok = detail["Stok"]
-                    detailHarga = detail["Harga"]
-                    detailKategori = detail["Kategori"]
-
-                    print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: Rp.{detailHarga},00")
+                for nomor,brg in enumerate(hasilurutMurah, start=1):
+                    print(f"{nomor}. Kode Barang: {brg[0]} | Nama Barang: {brg[1]} | Stok: {brg[2]} | Harga: {brg[3]} | Kategori: {brg[4]}")
                             
             elif input_sorting == 2:
                 bersihin_layar()
 
                 hasilurutMahal = sorted(
-                    barang_lengkap.items(),
-                    key=lambda x: x[1]["Harga"],
+                    barang_lengkap,
+                    key=lambda x: x[3],
                     reverse=True
                 )
 
-                for kode_barang, detail in hasilurutMahal:
-                    detailNamaBarang = detail["Nama Barang"]
-                    detailStok = detail["Stok"]
-                    detailHarga = detail["Harga"]
-                    detailKategori = detail["Kategori"]
-
-                    print(f"{detailNamaBarang}, Stok: {detailStok}, Harga: Rp.{detailHarga},00")
+                for nomor,brg in enumerate(hasilurutMahal, start=1):
+                    print(f"{nomor}. Kode Barang: {brg[0]} | Nama Barang: {brg[1]} | Stok: {brg[2]} | Harga: {brg[3]} | Kategori: {brg[4]}")
 
             input("\nTekan Enter Untuk Kembali ke Menu Utama")
             break
