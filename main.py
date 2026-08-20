@@ -5,7 +5,6 @@ menu_utama = ["Tambah Barang", "Edit Barang", "Hapus Barang", "Lihat Barang", "C
 menu_sorting =["Urutkan Harga Dari Yang Termurah", "Urutkan Harga Dari Yang Termahal"]
 
 db_path = os.path.join("src/database/database.db")
-
 koneksi = sqlite3.connect(db_path)
 kursor = koneksi.cursor()
 
