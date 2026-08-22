@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import uuid
 
 menu_utama = ["Tambah Barang", "Edit Barang", "Hapus Barang", "Lihat Barang", "Cari Barang", "Filter Stok", "Urutkan Harga", "Keluar"]
 menu_sorting =["Urutkan Harga Dari Yang Termurah", "Urutkan Harga Dari Yang Termahal"]
@@ -32,10 +33,10 @@ def bongkar_db ():
         kursor.execute("SELECT * FROM Barang")
         for barang in enumerate(kursor, start=1):
             print(f"{barang[0]}. Kode Barang: {barang[1][0]} | Nama Barang: {barang[1][1]} | Stok: {barang[1][2]} | Harga: {barang[1][3]} |")
-            list_barang.append(barang)
+            list_barang.append(barang[1])
 
         return list_barang
-    except TimeoutError:
+    except sqlite3.DatabaseError:
         print("Database Tidak Merespon")
         return
 
@@ -94,16 +95,6 @@ while True:
 
             while True:
                 bersihin_layar()
-                kode_barang = input("Masukkan Kode Barang: ")
-                if kode_barang == "":
-                    print("Data Tidak Boleh Kosong")
-                    input("\n Tekan Enter....")
-                    continue
-                else:
-                    break
-
-            while True:
-                bersihin_layar()
                 nama_barang = input("Masukkan Nama Barang: ")
                 if nama_barang == "":
                     print("Data Tidak Boleh Kosong")
@@ -148,11 +139,15 @@ while True:
 
             bersihin_layar()
 
-            kursor.execute("INSERT INTO Barang (kode_barang, nama_barang, stok, harga, kategori) VALUES (?, ?, ?, ?, ?)", (kode_barang, nama_barang, jumlah, harga, kategori))
+            kode_barang = uuid.uuid4()
 
-            print(f"Barang dengan kode {kode_barang}, nama {nama_barang}, berjumlah {jumlah}, dengan harga Rp.{harga},00, berhasil di tambahkan pada kategori {kategori}!")
+            try:
+                kursor.execute("INSERT INTO Barang (kode_barang, nama_barang, stok, harga, kategori) VALUES (?, ?, ?, ?, ?) IF kode_barang NOT EXIST", (kode_barang, nama_barang, jumlah, harga, kategori))
+                print(f"Barang dengan kode {kode_barang}, nama {nama_barang}, berjumlah {jumlah}, dengan harga Rp.{harga},00, berhasil di tambahkan pada kategori {kategori}!")
+                koneksi.commit()
 
-            koneksi.commit()
+            except sqlite3.IntegrityError:
+                print("Terdapat Data Duplikat")
 
             jawaban_user = input("\nTekan enter untuk kembali ke menu utama")
             break
@@ -268,7 +263,9 @@ while True:
             kursor.execute('''
                 DELETE FROM Barang
                 WHERE kode_barang = ?
-            ''', targetBarang[0],)
+            ''', targetBarang[0])
+
+            koneksi.commit()
 
             bersihin_layar()
 
@@ -336,6 +333,8 @@ while True:
 
             if not inputan_user.isdigit():
                 print("Masukkan Angka")
+                input("\n Tekan Enter Untuk Lanjut")
+                continue
 
             input_sorting = int(inputan_user)
 
